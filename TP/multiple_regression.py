@@ -202,7 +202,7 @@ def ud_5d(df, start_date, term, nameposition):
             break
         else:
             start_date = int(start_date) + 1
-    for i in range(int(term) + 1):  # 주식 위치 찾기 
+    for i in range(int(term) + 1):  # 주식 위치 찾기
         if i == 0:
             for j in range(len(df)):
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
@@ -316,22 +316,29 @@ if __name__ == "__main__":
 
     df = df.dropna(axis=0)
 
-    dfx = df[["bias", "cv_diff_value", "cv_diff_rate", "cv_ma5_value", "cv_ma5_rate" ,"ud_5d"]]
+    dfx = df[["bias", "cv_diff_value", "cv_diff_rate", "cv_ma5_value", "cv_ma5_rate", "vv_diff_value", "vv_diff_rate", "vv_maN_value", "vv_maN_rate"]]
     dfy = df[["cv5d_diff_rate"]]
+    #1.ud_5d는 beta값이 0에 수렵하므로 제거
+    #
 
     dfx = dfx.values
     dfy = dfy.values
 
     # 15.3 모델학습하기
-    random.seed(0)
-    # beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
-    # print("beta", beta)
+    ''''''
+    #random.seed(0)
+    #beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
+    #print("beta", beta)
     # scikit-learn을 쓴다면: fit_intercept=False : 알파를 베타의 첫항목으로 계산
+
     myreg = LinearRegression(False).fit(dfx, dfy)
     print("beta of LR:", myreg.coef_)
 
+
+
     # 15.5 적합성(Goodness of fit)
     print("r-squared", multiple_r_squared(dfx, dfy, myreg.coef_[0]))
+    #print("r-squared", multiple_r_squared(dfx, dfy, beta))
     print()
 
     """
@@ -372,26 +379,28 @@ if __name__ == "__main__":
     print("p_value(0.911, 0.990)", p_value(0.911, 0.990))
     print()
 
-
+    """
     # 15.8 Regularization
     print("regularization")
+
     # (1) 교재방법
+    """
     print("(1) by Textbook")
     random.seed(0)
-    for alpha in [0.0, 0.01, 0.1, 1, 10, 20, 50]:
-        beta = estimate_beta_ridge(x, daily_minutes_good, alpha=alpha)
+    for alpha in [0.0, 1, 20, 30, 50, 100]:
+        beta = estimate_beta_ridge(dfx, dfy, alpha=alpha)
         print("alpha", alpha)
         print("beta", beta)
         # print("dot(beta[1:],beta[1:])", dot(beta[1:], beta[1:]))
-        print("r-squared", multiple_r_squared(x, daily_minutes_good, beta))
+        print("r-squared", multiple_r_squared(dfx, dfy, beta))
         print()
+    """
     # (2) scikit-liearn 사용방법
     print("(2) by scikit-learn")
-    for alpha in [0.0, 0.01, 0.1, 1, 10, 20, 50]:
+    for alpha in [0.0, 0.01, 0.1, 1, 3, 5]:
         ridge_reg = Ridge(alpha, fit_intercept=False, solver="cholesky")
-        ridge_reg.fit(x, daily_minutes_good)
-        beta = ridge_reg.coef_
+        ridge_reg.fit(dfx, dfy)
+        beta = ridge_reg.coef_[0]
         print("alpha", alpha)
         print("beta", beta)
-        print("r-squared", multiple_r_squared(x, daily_minutes_good, beta))
-    """
+        print("r-squared", multiple_r_squared(dfx, dfy, beta))
