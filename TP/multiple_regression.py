@@ -9,6 +9,7 @@ import math, random
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 import pandas
+import numpy as np
 
 
 def predict(x_i, beta):
@@ -228,6 +229,7 @@ def ud_5d(df, start_date, term, nameposition):
         else:  # i+1번째 날의 값 0
             df.loc[i + j + nameposition + 1, "ud_5d"] = 0
 
+
 def  vv_diff_value(df, start_date, term, nameposition):  #거래량 일간 변화량
     for i in range(int(term)):
         if i == 0:
@@ -237,6 +239,7 @@ def  vv_diff_value(df, start_date, term, nameposition):  #거래량 일간 변�
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
             break
         df.loc[i + j + nameposition, "vv_diff_value"] = df.values[i + j + nameposition][7] - df.values[i + j + nameposition + 1][7]
+
 
 def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화율
     for i in range(int(term)):
@@ -250,6 +253,7 @@ def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화
             df.loc[i + j + nameposition, "vv_diff_rate"] = 0
         else:
             df.loc[i + j + nameposition, "vv_diff_rate"] = abs(df.values[i + j + nameposition][7] / df.values[i + j + nameposition + 1][7] - 1) * 100
+
 
 def vv_maN_value(df, start_date, term, nameposition):  # 거래량의 5일 이동평균
     for i in range(int(term) + 1):
@@ -265,6 +269,7 @@ def vv_maN_value(df, start_date, term, nameposition):  # 거래량의 5일 이�
                                                         df.values[i + j + nameposition + 3][7] +
                                                         df.values[i + j + nameposition + 4][7]) / 5
 
+
 def vv_maN_rate(df, start_date, term, nameposition):
     for i in range(int(term)):
         if i == 0:
@@ -277,6 +282,7 @@ def vv_maN_rate(df, start_date, term, nameposition):
             df.loc[i + j + nameposition, "vv_maN_rate"] = 0
         else:
             df.loc[i + j + nameposition, "vv_maN_rate"] = abs(df.values[i + j + nameposition][17] / df.values[i + j + nameposition + 1][17] - 1) * 100
+
 
 if __name__ == "__main__":
 
@@ -301,97 +307,66 @@ if __name__ == "__main__":
             break
 
     df["bias"] = 1
+
     cv_diff_value(df, start_date, term, nameposition)
     cv_diff_rate(df, start_date, term, nameposition)
     cv_ma5_value(df, start_date, term, nameposition)
     cv_ma5_rate(df, start_date, term, nameposition)
     cv5d_diff_rate(df, start_date, term, nameposition)
     ud_5d(df, start_date, term, nameposition)
-    vv_diff_value(df, start_date, term, nameposition)
-    vv_diff_rate(df, start_date, term, nameposition)
-    vv_maN_value(df, start_date, term, nameposition)
-    vv_maN_rate(df, start_date, term, nameposition)
+    # vv_diff_value(df, start_date, term, nameposition)
+    # vv_diff_rate(df, start_date, term, nameposition)
+    # vv_maN_value(df, start_date, term, nameposition)
+    # vv_maN_rate(df, start_date, term, nameposition)
 
     df.to_csv('stock_history_added.csv', encoding='CP949')
 
     df = df.dropna(axis=0)
 
-    dfx = df[["bias", "cv_diff_value", "cv_diff_rate", "cv_ma5_value", "cv_ma5_rate" ,"ud_5d"]]
+    dfx = df[["bias", "cv_diff_value", "cv_diff_rate", "cv_ma5_value"]]
     dfy = df[["cv5d_diff_rate"]]
 
     dfx = dfx.values
     dfy = dfy.values
 
+    dfy = np.ravel(dfy, order='C')
+
+    print(dfx)
+    print(dfy)
     # 15.3 모델학습하기
     random.seed(0)
-    # beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
-    # print("beta", beta)
+    beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
+    print("beta", beta)
     # scikit-learn을 쓴다면: fit_intercept=False : 알파를 베타의 첫항목으로 계산
     myreg = LinearRegression(False).fit(dfx, dfy)
     print("beta of LR:", myreg.coef_)
 
     # 15.5 적합성(Goodness of fit)
-    print("r-squared", multiple_r_squared(dfx, dfy, myreg.coef_[0]))
+    print("r-squared", multiple_r_squared(dfx, dfy, beta))
+    print("r-squared", multiple_r_squared(dfx, dfy, myreg.coef_))
     print()
 
-    """
-
-    # 15.6 bootstrap
-    print("digression: the bootstrap")
-    # 101 points all very close to 100
-    close_to_100 = [99.5 + random.random() for _ in range(101)]
-
-    # 101 points, 50 of them near 0, 50 of them near 200, 1 of them near 100
-    far_from_100 = ([99.5 + random.random()] +
-                    [random.random() for _ in range(50)] +
-                    [200 + random.random() for _ in range(50)])
-
-
-    print("bootstrap_statistic(close_to_100, median, 10):")
-    print(bootstrap_statistic(close_to_100, median, 10))
-    print("bootstrap_statistic(far_from_100, median, 10):")
-    print(bootstrap_statistic(far_from_100, median, 10))
-    print()
-
-    # 15.7 계수의 표준오차 (skip)
-    random.seed(0) # so that you get the same results as me
-    bootstrap_betas = bootstrap_statistic(list(zip(x, daily_minutes_good)),
-                                          estimate_sample_beta,
-                                          100)
-
-    bootstrap_standard_errors = [
-        standard_deviation([beta[i] for beta in bootstrap_betas])
-        for i in range(4)]
-
-    print("bootstrap standard errors", bootstrap_standard_errors)
-    print()
-
-    print("p_value(30.63, 1.174)", p_value(30.63, 1.174))
-    print("p_value(0.972, 0.079)", p_value(0.972, 0.079))
-    print("p_value(-1.868, 0.131)", p_value(-1.868, 0.131))
-    print("p_value(0.911, 0.990)", p_value(0.911, 0.990))
-    print()
-
+    '''
 
     # 15.8 Regularization
     print("regularization")
     # (1) 교재방법
     print("(1) by Textbook")
     random.seed(0)
-    for alpha in [0.0, 0.01, 0.1, 1, 10, 20, 50]:
-        beta = estimate_beta_ridge(x, daily_minutes_good, alpha=alpha)
+    for alpha in [0.0, 0.01, 0.1, 1, 10]:
+        beta = estimate_beta_ridge(dfx, dfy, alpha=alpha)
         print("alpha", alpha)
         print("beta", beta)
         # print("dot(beta[1:],beta[1:])", dot(beta[1:], beta[1:]))
-        print("r-squared", multiple_r_squared(x, daily_minutes_good, beta))
+        print("r-squared", multiple_r_squared(dfx, dfy, beta))
         print()
+'''
     # (2) scikit-liearn 사용방법
     print("(2) by scikit-learn")
-    for alpha in [0.0, 0.01, 0.1, 1, 10, 20, 50]:
+    for alpha in [0.0, 0.01, 0.1, 1, 10]:
         ridge_reg = Ridge(alpha, fit_intercept=False, solver="cholesky")
-        ridge_reg.fit(x, daily_minutes_good)
+        ridge_reg.fit(dfx, dfy)
         beta = ridge_reg.coef_
         print("alpha", alpha)
         print("beta", beta)
-        print("r-squared", multiple_r_squared(x, daily_minutes_good, beta))
-    """
+        print("r-squared", multiple_r_squared(dfx, dfy, beta))
