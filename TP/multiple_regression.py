@@ -202,7 +202,7 @@ def ud_5d(df, start_date, term, nameposition):
             break
         else:
             start_date = int(start_date) + 1
-    for i in range(int(term) + 1):  # 주식 위치 찾기
+    for i in range(int(term) + 1):  # 주식 위치 찾기 
         if i == 0:
             for j in range(len(df)):
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
