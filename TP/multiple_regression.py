@@ -346,21 +346,6 @@ if __name__ == "__main__":
     print("r-squared : ", multiple_r_squared(dfx, dfy, myreg.coef_))
     print()
 
-    '''
-
-    # 15.8 Regularization
-    print("regularization")
-    # (1) 교재방법
-    print("(1) by Textbook")
-    random.seed(0)
-    for alpha in [0.0, 0.01, 0.1, 1, 10]:
-        beta = estimate_beta_ridge(dfx, dfy, alpha=alpha)
-        print("alpha", alpha)
-        print("beta", beta)
-        # print("dot(beta[1:],beta[1:])", dot(beta[1:], beta[1:]))
-        print("r-squared", multiple_r_squared(dfx, dfy, beta))
-        print()
-'''
     # (2) scikit-liearn 사용방법
     print("(2) by scikit-learn")
     for alpha in [0.0, 0.01, 0.1, 1, 10]:
