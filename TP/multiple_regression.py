@@ -203,7 +203,7 @@ def ud_5d(df, start_date, term, nameposition):
             break
         else:
             start_date = int(start_date) + 1
-    for i in range(int(term) + 1):  # 주식 위치 찾기
+    for i in range(int(term) + 1):  # 주식 위치 찾기 
         if i == 0:
             for j in range(len(df)):
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
@@ -255,7 +255,7 @@ def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화
             df.loc[i + j + nameposition, "vv_diff_rate"] = abs(df.values[i + j + nameposition][7] / df.values[i + j + nameposition + 1][7] - 1) * 100
 
 
-def vv_maN_value(df, start_date, term, nameposition):  # 거래량의 5일 이동평균
+def vv_ma5_value(df, start_date, term, nameposition):  # 거래량의 5일 이동평균
     for i in range(int(term) + 1):
         if i == 0:
             for j in range(len(df)):
@@ -263,14 +263,14 @@ def vv_maN_value(df, start_date, term, nameposition):  # 거래량의 5일 이�
                     break
         if (i + j + nameposition > 476490 - 7) or (i + j > 230 - 5):
             break
-        df.loc[i + j + nameposition, "vv_maN_value"] = (df.values[i + j + nameposition][7] +
+        df.loc[i + j + nameposition, "vv_ma5_value"] = (df.values[i + j + nameposition][7] +
                                                         df.values[i + j + nameposition + 1][7] +
                                                         df.values[i + j + nameposition + 2][7] +
                                                         df.values[i + j + nameposition + 3][7] +
                                                         df.values[i + j + nameposition + 4][7]) / 5
 
 
-def vv_maN_rate(df, start_date, term, nameposition):
+def vv_ma5_rate(df, start_date, term, nameposition):
     for i in range(int(term)):
         if i == 0:
             for j in range(len(df)):
@@ -279,9 +279,9 @@ def vv_maN_rate(df, start_date, term, nameposition):
         if (i + j + nameposition > 476490 - 7) or (i + j > 230 - 6):
             break
         if int(df.values[i + j + nameposition + 1][17]) == int(0):
-            df.loc[i + j + nameposition, "vv_maN_rate"] = 0
+            df.loc[i + j + nameposition, "vv_ma5_rate"] = 0
         else:
-            df.loc[i + j + nameposition, "vv_maN_rate"] = abs(df.values[i + j + nameposition][17] / df.values[i + j + nameposition + 1][17] - 1) * 100
+            df.loc[i + j + nameposition, "vv_ma5_rate"] = abs(df.values[i + j + nameposition][17] / df.values[i + j + nameposition + 1][17] - 1) * 100
 
 
 if __name__ == "__main__":
@@ -314,36 +314,36 @@ if __name__ == "__main__":
     cv_ma5_rate(df, start_date, term, nameposition)
     cv5d_diff_rate(df, start_date, term, nameposition)
     ud_5d(df, start_date, term, nameposition)
-    # vv_diff_value(df, start_date, term, nameposition)
-    # vv_diff_rate(df, start_date, term, nameposition)
-    # vv_maN_value(df, start_date, term, nameposition)
-    # vv_maN_rate(df, start_date, term, nameposition)
+    vv_diff_value(df, start_date, term, nameposition)
+    vv_diff_rate(df, start_date, term, nameposition)
+    vv_ma5_value(df, start_date, term, nameposition)
+    vv_ma5_rate(df, start_date, term, nameposition)
 
     df.to_csv('stock_history_added.csv', encoding='CP949')
 
     df = df.dropna(axis=0)
 
-    dfx = df[["bias", "cv_diff_value", "cv_diff_rate", "cv_ma5_value"]]
+    dfx = df[["bias", "cv_diff_rate", "cv_ma5_rate", "volume_value"]]
     dfy = df[["cv5d_diff_rate"]]
 
     dfx = dfx.values
     dfy = dfy.values
 
     dfy = np.ravel(dfy, order='C')
-
+    print("입력값(bias, cv_diff_rate, cv_ma5_rate, vv_ma5_rate")
     print(dfx)
+    print("출력값")
     print(dfy)
     # 15.3 모델학습하기
     random.seed(0)
-    beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
-    print("beta", beta)
+    # beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
+    # print("beta", beta)
     # scikit-learn을 쓴다면: fit_intercept=False : 알파를 베타의 첫항목으로 계산
     myreg = LinearRegression(False).fit(dfx, dfy)
-    print("beta of LR:", myreg.coef_)
+    print("beta of LR : ", myreg.coef_)
 
     # 15.5 적합성(Goodness of fit)
-    print("r-squared", multiple_r_squared(dfx, dfy, beta))
-    print("r-squared", multiple_r_squared(dfx, dfy, myreg.coef_))
+    print("r-squared : ", multiple_r_squared(dfx, dfy, myreg.coef_))
     print()
 
     '''
@@ -364,7 +364,7 @@ if __name__ == "__main__":
     # (2) scikit-liearn 사용방법
     print("(2) by scikit-learn")
     for alpha in [0.0, 0.01, 0.1, 1, 10]:
-        ridge_reg = Ridge(alpha, fit_intercept=False, solver="cholesky")
+        ridge_reg = Ridge(alpha, fit_intercept=False, solver="auto")
         ridge_reg.fit(dfx, dfy)
         beta = ridge_reg.coef_
         print("alpha", alpha)
