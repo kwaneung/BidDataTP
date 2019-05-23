@@ -285,7 +285,7 @@ def vv_ma5_rate(df, start_date, term, nameposition):
 
 
 if __name__ == "__main__":
-
+    # 트레이닝값-------------------------------------------------
     df = pandas.read_csv('stock_history.csv', encoding='CP949')  # basic_date, stockname, stock_code, open_value, high_value, low_value, close_value, volume_value
     for i in range(8, 14):
         del df["Unnamed: " + str(i)]
@@ -330,10 +330,56 @@ if __name__ == "__main__":
     dfy = dfy.values
 
     dfy = np.ravel(dfy, order='C')
-    print("입력값(bias, cv_diff_rate, cv_ma5_rate, vv_ma5_rate")
-    print(dfx)
-    print("출력값")
-    print(dfy)
+
+    # 테스트 값
+
+    df = pandas.read_csv('stock_history.csv',
+                         encoding='CP949')  # basic_date, stockname, stock_code, open_value, high_value, low_value, close_value, volume_value
+    for i in range(8, 14):
+        del df["Unnamed: " + str(i)]
+    nameposition = 0
+
+    while 1:
+        start_date = input("테스트 시작 일을 입력하시오(ex . 20171222) : ")
+        if int(start_date) in df.basic_date.values:
+            break
+        else:
+            print("해당 일자의 주식 정보가 없습니다. 확인후 이용해 주시기 바랍니다.")
+
+    term = input("테스트 기간을 입력하시오(주말 제외) : ")
+    companyname = input("회사를 입력하세요 : ")
+
+    for k in range(len(df)):
+        if df.loc[k, "stockname"] == str(companyname):
+            nameposition = k
+            break
+
+    df["bias"] = 1
+
+    cv_diff_value(df, start_date, term, nameposition)
+    cv_diff_rate(df, start_date, term, nameposition)
+    cv_ma5_value(df, start_date, term, nameposition)
+    cv_ma5_rate(df, start_date, term, nameposition)
+    cv5d_diff_rate(df, start_date, term, nameposition)
+    ud_5d(df, start_date, term, nameposition)
+    vv_diff_value(df, start_date, term, nameposition)
+    vv_diff_rate(df, start_date, term, nameposition)
+    vv_ma5_value(df, start_date, term, nameposition)
+    vv_ma5_rate(df, start_date, term, nameposition)
+
+    df.to_csv('stock_history_added.csv', encoding='CP949')
+
+    df = df.dropna(axis=0)
+
+    dftx = df[["bias", "cv_diff_rate", "cv_ma5_rate", "volume_value"]]
+    dfty = df[["cv5d_diff_rate"]]
+
+    dftx = dftx.values
+    dfty = dfty.values
+
+    dfty = np.ravel(dfty, order='C')
+
+
     # 15.3 모델학습하기
     random.seed(0)
     # beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
@@ -343,9 +389,10 @@ if __name__ == "__main__":
     print("beta of LR : ", myreg.coef_)
 
     # 15.5 적합성(Goodness of fit)
-    print("r-squared : ", multiple_r_squared(dfx, dfy, myreg.coef_))
+    print("training data : ", multiple_r_squared(dfx, dfy, myreg.coef_))
     print()
-
+    print("test data : ", myreg.score(dftx, dfty))
+    print("test data : ", multiple_r_squared(dftx, dfty, myreg.coef_))
     # (2) scikit-liearn 사용방법
     print("(2) by scikit-learn")
     for alpha in [0.0, 0.01, 0.1, 1, 10]:
@@ -354,4 +401,5 @@ if __name__ == "__main__":
         beta = ridge_reg.coef_
         print("alpha", alpha)
         print("beta", beta)
-        print("r-squared", multiple_r_squared(dfx, dfy, beta))
+        print("training : ", multiple_r_squared(dfx, dfy, beta))
+        print("test : ", multiple_r_squared(dftx, dfty, beta))
