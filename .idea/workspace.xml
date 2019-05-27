@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TP/multiple_regression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="338" column="13" lean-forward="true" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
+            <state relative-caret-position="265">
+              <caret line="134" column="17" lean-forward="true" selection-start-line="134" selection-start-column="17" selection-end-line="134" selection-end-column="17" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -47,10 +47,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-37" />
-    <option name="y" value="27" />
+    <option name="x" value="531" />
+    <option name="y" value="419" />
     <option name="width" value="1050" />
-    <option name="height" value="711" />
+    <option name="height" value="736" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -157,14 +157,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18824404" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18809272" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3295082" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3286334" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -178,67 +178,12 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>162</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>163</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>164</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>165</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>166</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>167</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>154</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TP/multiple_regression.py</url>
-          <line>354</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TP/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TP/test.py" />
     <entry file="file://$PROJECT_DIR$/TP/multiple_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="338" column="13" lean-forward="true" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
+        <state relative-caret-position="265">
+          <caret line="134" column="17" lean-forward="true" selection-start-line="134" selection-start-column="17" selection-end-line="134" selection-end-column="17" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

@@ -128,7 +128,7 @@ def cv_diff_value(df, start_date, term, nameposition):  # 종가 일간 변화�
 def cv_diff_rate(df, start_date, term, nameposition):  # 종가 일간 변화율
     for i in range(int(term)):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
@@ -139,10 +139,10 @@ def cv_diff_rate(df, start_date, term, nameposition):  # 종가 일간 변화율
             df.loc[i + j + nameposition, "cv_diff_rate"] = abs(df.values[i + j + nameposition][6] / df.values[i + j + nameposition + 1][6] - 1) * 100
 
 
-def cv_ma3_value(df, start_date, term, nameposition):  # 종가의 5일 이동평균
+def cv_ma3_value(df, start_date, term, nameposition):  # 종가의 3일 이동평균
     for i in range(int(term) + 1):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 5) or (i + j > 230 - 4):
@@ -152,10 +152,10 @@ def cv_ma3_value(df, start_date, term, nameposition):  # 종가의 5일 이동�
                                                         df.values[i + j + nameposition + 2][6])/3
 
 
-def cv_ma3_rate(df, start_date, term, nameposition):  # # 종가의 5일 이동평균의 일간 변화율
+def cv_ma3_rate(df, start_date, term, nameposition):  # 종가의 3일 이동평균의 일간 변화율
     for i in range(int(term)):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
@@ -168,10 +168,10 @@ def cv_ma3_rate(df, start_date, term, nameposition):  # # 종가의 5일 이동�
             df.loc[i + j + nameposition, "cv_ma3_rate"] = abs(df.values[i + j + nameposition][11] / df.values[i + j + nameposition + 1][11] - 1) * 100
 
 
-def cv3d_diff_rate(df, start_date, term, nameposition):  # N일간의 종가 상승률을 (N-1)번째 날의 값으로 설정
+def cv3d_diff_rate(df, start_date, term, nameposition):  # 3일간의 종가 상승률을 2번째 날의 값으로 설정
     if start_date == "20171222":
         start_date = int(start_date) - 1
-    start_date = int(start_date) + 1  # n-1번째 날이어야하니까 하나를 올려 계산
+    start_date = int(start_date) + 1  # 2번째 날이어야하니까 하나를 올려 계산
     while 1: # 주말 검출시 하루씩 밀어 계산
         if int(start_date) in df.basic_date.values:
             break
@@ -179,7 +179,7 @@ def cv3d_diff_rate(df, start_date, term, nameposition):  # N일간의 종가 상
             start_date = int(start_date) + 1
     for i in range(int(term) + 1):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     if start_date == 20171222:
                         j -= 1
@@ -197,7 +197,7 @@ def cv3d_diff_rate(df, start_date, term, nameposition):  # N일간의 종가 상
 def ud_3d(df, start_date, term, nameposition):
     if start_date == "20171222":
         start_date = int(start_date) - 1
-    start_date = int(start_date) + 1  # n-1번째 날이어야하니까 하나를 올려 계산
+    start_date = int(start_date) + 1  # 2번째 날이어야하니까 하나를 올려 계산
     while 1: # 주말 검출시 하루씩 밀어 계산
         if int(start_date) in df.basic_date.values:
             break
@@ -205,7 +205,7 @@ def ud_3d(df, start_date, term, nameposition):
             start_date = int(start_date) + 1
     for i in range(int(term) + 1):  # 주식 위치 찾기
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     if start_date == 20171222:
                         j -= 1
@@ -216,20 +216,20 @@ def ud_3d(df, start_date, term, nameposition):
             continue
         if ((df.loc[i + j + nameposition, "cv_diff_value"] > 0) and
                 (df.loc[i + j + nameposition + 1, "cv_diff_value"] > 0) and
-                (df.loc[i + j + nameposition + 2, "cv_diff_value"] > 0)):  # 5일 연속 종가 상승할때 i+1번째 날의 값 1
+                (df.loc[i + j + nameposition + 2, "cv_diff_value"] > 0)):  # 5일 연속 종가 상승할때 2번째 날의 값 1
             df.loc[i + j + nameposition + 1, "ud_3d"] = 1
         elif ((df.loc[i + j + nameposition, "cv_diff_value"] < 0) and
               (df.loc[i + j + nameposition + 1, "cv_diff_value"] < 0) and
-              (df.loc[i + j + nameposition + 2, "cv_diff_value"] < 0)):  # 5일 연속 종가 하락할때 i+1번째 날의 값 -1
+              (df.loc[i + j + nameposition + 2, "cv_diff_value"] < 0)):  # 5일 연속 종가 하락할때 2번째 날의 값 -1
             df.loc[i + j + nameposition + 1, "ud_3d"] = -1
-        else:  # i+1번째 날의 값 0
+        else:  # 2번째 날의 값 0
             df.loc[i + j + nameposition + 1, "ud_3d"] = 0
 
 
-def  vv_diff_value(df, start_date, term, nameposition):  #거래량 일간 변화량
+def  vv_diff_value(df, start_date, term, nameposition):  # 거래량 일간 변화량
     for i in range(int(term)):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
@@ -240,7 +240,7 @@ def  vv_diff_value(df, start_date, term, nameposition):  #거래량 일간 변�
 def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화율
     for i in range(int(term)):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
@@ -251,10 +251,10 @@ def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화
             df.loc[i + j + nameposition, "vv_diff_rate"] = abs(df.values[i + j + nameposition][7] / df.values[i + j + nameposition + 1][7] - 1) * 100
 
 
-def vv_ma3_value(df, start_date, term, nameposition):  # 거래량의 5일 이동평균
+def vv_ma3_value(df, start_date, term, nameposition):  # 거래량의 3일 이동평균
     for i in range(int(term) + 1):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 5) or (i + j > 230 - 3):
@@ -264,10 +264,10 @@ def vv_ma3_value(df, start_date, term, nameposition):  # 거래량의 5일 이�
                                                         df.values[i + j + nameposition + 2][7]) / 3
 
 
-def vv_ma3_rate(df, start_date, term, nameposition):
+def vv_ma3_rate(df, start_date, term, nameposition):  # 거래량의 3일 이동평균의 변화율
     for i in range(int(term)):
         if i == 0:
-            for j in range(len(df)):
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
                 if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
                     break
         if (i + j + nameposition > 476490 - 5) or (i + j > 230 - 4):
@@ -279,31 +279,31 @@ def vv_ma3_rate(df, start_date, term, nameposition):
 
 
 if __name__ == "__main__":
-    # 트레이닝값-------------------------------------------------
+    # 트레이닝-------------------------------------------------소스코드
     df = pandas.read_csv('stock_history.csv', encoding='CP949')  # basic_date, stockname, stock_code, open_value, high_value, low_value, close_value, volume_value
-    for i in range(8, 14):
+
+    for i in range(8, 14): # 쓸데없는값 제거
         del df["Unnamed: " + str(i)]
 
-    nameposition = 0
+    nameposition = 0  # 선택한 주식의 시작위치
 
     while 1:
-        start_date = input("시작 일을 입력하시오(ex . 20171222) : ")
+        start_date = input("시작 일을 입력하시오(ex . 20171222) : ")  # 학습 데이터의 시작일자 입력
         if int(start_date) in df.basic_date.values:
             break
         else:
             print("해당 일자의 주식 정보가 없습니다. 확인후 이용해 주시기 바랍니다.")
 
-    term = input("학습 기간을 입력하시오(주말 제외) : ")
-    companyname = input("회사를 입력하세요 : ")
+    term = input("학습 기간을 입력하시오(주말 제외) : ")  # 학습데이터의 학습 기간을 입력
+
+    companyname = input("원하는 주식 명을 입력하세요 : ")  # 원하는 주식명 입력
 
     for k in range(len(df)):
         if df.loc[k,"stockname"] == str(companyname):
             nameposition = k
             break
 
-
     df["bias"] = 1
-
     cv_diff_value(df, start_date, term, nameposition)
     cv_diff_rate(df, start_date, term, nameposition)
     cv_ma3_value(df, start_date, term, nameposition)
@@ -319,30 +319,31 @@ if __name__ == "__main__":
 
     df = df.dropna(axis=0)
 
-    dfx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "vv_ma3_rate"]]
-    dfy = df[["cv3d_diff_rate"]]
+    dfx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d"]]  # 독립변수
+    dfy = df[["cv3d_diff_rate"]]  # 종속변수
 
     dfx = dfx.values
     dfy = dfy.values
 
-    dfy = np.ravel(dfy, order='C')
+    dfy = np.ravel(dfy, order='C')  # 1차원 리스트로 변환
 
-    # 테스트 값
+    # 테스트---------------------------------------------------소스코드
 
     df = pandas.read_csv('stock_history_added.csv', encoding='CP949')  # basic_date, stockname, stock_code, open_value, high_value, low_value, close_value, volume_value
-    del df["Unnamed: " + str(0)]
-    print(df)
+    del df["Unnamed: " + str(0)] # 앞에서 인덱스값 저장된것을 지워준다.
+
     while 1:
-        start_date = input("테스트 시작 일을 입력하시오(ex . 20171222) : ")
+        start_date = input("테스트 시작 일을 입력하시오(ex . 20171222) : ")  # 테스트 시작일 입력
         if int(start_date) in df.basic_date.values:
             break
         else:
             print("해당 일자의 주식 정보가 없습니다. 확인후 이용해 주시기 바랍니다.")
 
-    term = input("테스트 기간을 입력하시오(주말 제외) : ")
-    companyname = input("회사를 입력하세요 : ")
+    term = input("테스트 기간을 입력하시오(주말 제외) : ")  # 테스트 기간 입력
 
-    for k in range(len(df)):
+    companyname = input("원하는 주식 명을 입력하세요 : ")  # 원하는 주식명 입력
+
+    for k in range(len(df)):  # 원하는 주식의 위치를 저장
         if df.loc[k, "stockname"] == str(companyname):
             nameposition = k
             break
@@ -364,30 +365,22 @@ if __name__ == "__main__":
 
     df = df.dropna(axis=0)
 
-    dftx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "vv_ma3_rate"]]
-    dfty = df[["cv3d_diff_rate"]]
+    dftx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d"]]  # 독립변수
+    dfty = df[["cv3d_diff_rate"]]  # 종속변수
 
     dftx = dftx.values
     dfty = dfty.values
 
     dfty = np.ravel(dfty, order='C')
 
-
-    # 15.3 모델학습하기
     random.seed(0)
-    # beta = estimate_beta(dfx, dfy) # [30.63, 0.972, -1.868, 0.911]
-    # print("beta", beta)
-    # scikit-learn을 쓴다면: fit_intercept=False : 알파를 베타의 첫항목으로 계산
-    myreg = LinearRegression(False).fit(dfx, dfy)
+
+    myreg = LinearRegression(False).fit(dfx, dfy)  # 알파를 베타의 첫항목으로 계산
     print("beta of LR : ", myreg.coef_)
 
-    # 15.5 적합성(Goodness of fit)
     print("training data : ", multiple_r_squared(dfx, dfy, myreg.coef_))
-    print()
-    #print("test data : ", myreg.score(dftx, dfty))
     print("test data : ", multiple_r_squared(dftx, dfty, myreg.coef_))
-    # (2) scikit-liearn 사용방법
-    print("(2) by scikit-learn")
+
     for alpha in [0.0, 0.01, 0.1, 1, 10]:
         ridge_reg = Ridge(alpha, fit_intercept=False, solver="auto")
         ridge_reg.fit(dfx, dfy)
