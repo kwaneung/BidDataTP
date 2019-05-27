@@ -133,10 +133,26 @@ def cv_diff_rate(df, start_date, term, nameposition):  # 종가 일간 변화율
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
             break
-        if int(df.values[i + j + nameposition + 1][6]) == int(0):
+        if float(df.values[i + j + nameposition + 1][6]) == float(0):
             df.loc[i + j + nameposition, "cv_diff_rate"] = 0
         else:
             df.loc[i + j + nameposition, "cv_diff_rate"] = abs(df.values[i + j + nameposition][6] / df.values[i + j + nameposition + 1][6] - 1) * 100
+
+def cv_diff_rate_rate(df, start_date, term, nameposition):  # 종가 일간 변화율의 변화율
+    for i in range(int(term)):
+        if i == 0:
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
+                if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
+                    break
+        if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
+            break
+        if df.values[i + j + nameposition + 1][10] == None:
+            df.loc[i + j + nameposition, "cv_diff_rate_rate"] = 0
+        if float(df.values[i + j + nameposition + 1][10]) == float(0):
+            df.loc[i + j + nameposition, "cv_diff_rate_rate"] = 0
+        else:
+            df.loc[i + j + nameposition, "cv_diff_rate_rate"] = abs(df.values[i + j + nameposition][10] / df.values[i + j + nameposition + 1][10] - 1) * 100
+
 
 
 def cv_ma3_value(df, start_date, term, nameposition):  # 종가의 3일 이동평균
@@ -162,7 +178,7 @@ def cv_ma3_rate(df, start_date, term, nameposition):  # 종가의 3일 이동평
             break
         if df.values[i + j + nameposition + 1][11] == None:
             df.loc[i + j + nameposition, "cv_ma3_rate"] = 0
-        if int(df.values[i + j + nameposition + 1][11]) == int(0):
+        if float(df.values[i + j + nameposition + 1][11]) == float(0):
             df.loc[i + j + nameposition, "cv_ma3_rate"] = 0
         else:
             df.loc[i + j + nameposition, "cv_ma3_rate"] = abs(df.values[i + j + nameposition][11] / df.values[i + j + nameposition + 1][11] - 1) * 100
@@ -188,7 +204,7 @@ def cv3d_diff_rate(df, start_date, term, nameposition):  # 3일간의 종가 상
             break
         if i + j + nameposition == -1:
             continue
-        if int(df.values[i + j + nameposition + 5][6]) == int(0):
+        if float(df.values[i + j + nameposition + 5][6]) == float(0):
             df.loc[i + j + nameposition, "cv3d_diff_rate"] = 0
         else:
             df.loc[i + j + nameposition + 1, "cv3d_diff_rate"] = abs(df.values[i + j + nameposition][6] / df.values[i + j + nameposition + 3][6] - 1) * 100
@@ -245,7 +261,7 @@ def vv_diff_rate(df, start_date, term, nameposition):  # 거래량 일간 변화
                     break
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
             break
-        if int(df.values[i + j + nameposition + 1][7]) == int(0):
+        if float(df.values[i + j + nameposition + 1][7]) == float(0):
             df.loc[i + j + nameposition, "vv_diff_rate"] = 0
         else:
             df.loc[i + j + nameposition, "vv_diff_rate"] = abs(df.values[i + j + nameposition][7] / df.values[i + j + nameposition + 1][7] - 1) * 100
@@ -272,7 +288,7 @@ def vv_ma3_rate(df, start_date, term, nameposition):  # 거래량의 3일 이동
                     break
         if (i + j + nameposition > 476490 - 5) or (i + j > 230 - 4):
             break
-        if int(df.values[i + j + nameposition + 1][17]) == int(0):
+        if float(df.values[i + j + nameposition + 1][17]) == float(0):
             df.loc[i + j + nameposition, "vv_ma3_rate"] = 0
         else:
             df.loc[i + j + nameposition, "vv_ma3_rate"] = abs(df.values[i + j + nameposition][17] / df.values[i + j + nameposition + 1][17] - 1) * 100
@@ -314,12 +330,13 @@ if __name__ == "__main__":
     vv_diff_rate(df, start_date, term, nameposition)
     vv_ma3_value(df, start_date, term, nameposition)
     vv_ma3_rate(df, start_date, term, nameposition)
+    cv_diff_rate_rate(df, start_date, term, nameposition)
 
     df.to_csv('stock_history_added.csv', encoding='CP949')
 
     df = df.dropna(axis=0)
 
-    dfx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d"]]  # 독립변수
+    dfx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d", "cv_diff_rate_rate"]]  # 독립변수
     dfy = df[["cv3d_diff_rate"]]  # 종속변수
 
     dfx = dfx.values
@@ -360,12 +377,13 @@ if __name__ == "__main__":
     vv_diff_rate(df, start_date, term, nameposition)
     vv_ma3_value(df, start_date, term, nameposition)
     vv_ma3_rate(df, start_date, term, nameposition)
+    cv_diff_rate_rate(df, start_date, term, nameposition)
 
     df.to_csv('stock_history_added.csv', encoding='CP949')
 
     df = df.dropna(axis=0)
 
-    dftx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d"]]  # 독립변수
+    dftx = df[["bias", "cv_diff_rate", "cv_ma3_rate", "ud_3d", "cv_diff_rate_rate"]]  # 독립변수
     dfty = df[["cv3d_diff_rate"]]  # 종속변수
 
     dftx = dftx.values
@@ -380,6 +398,18 @@ if __name__ == "__main__":
 
     print("training data : ", multiple_r_squared(dfx, dfy, myreg.coef_))
     print("test data : ", multiple_r_squared(dftx, dfty, myreg.coef_))
+
+    # 엑셀파일에 저장하자.
+    df = pandas.read_csv('stock_history_added.csv', encoding='CP949')  # basic_date, stockname, stock_code, open_value, high_value, low_value, close_value, volume_value
+    del df["Unnamed: " + str(0)]  # 앞에서 인덱스값 저장된것을 지워준다.
+
+    for i in range(int(term)):
+        if i == 0:
+            for j in range(len(df)):  # 처음에 시작일자를 j로 설정
+                if str(df.loc[j + nameposition, "basic_date"]) == str(start_date):
+                    break
+        df.loc[i + j + nameposition, "predict"] = myreg.predict(dftx[i].reshape(1, 5))
+    df.to_csv('stock_history_added.csv', encoding='CP949')
 
     for alpha in [0.0, 0.01, 0.1, 1, 10]:
         ridge_reg = Ridge(alpha, fit_intercept=False, solver="auto")
