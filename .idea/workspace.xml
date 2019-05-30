@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02502978-df87-4c4b-8d6d-72167fa7ed67" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP/multiple_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/TP/multiple_regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP/stock_history_added.csv" beforeDir="false" afterPath="$PROJECT_DIR$/TP/stock_history_added.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TP/multiple_regression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="834">
-              <caret line="420" column="62" selection-start-line="420" selection-start-column="62" selection-end-line="420" selection-end-column="62" />
+            <state relative-caret-position="1081">
+              <caret line="456" lean-forward="true" selection-start-line="456" selection-end-line="456" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -164,7 +162,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18809272" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18809272" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -263,8 +261,8 @@
     <entry file="file://$PROJECT_DIR$/TP/test.py" />
     <entry file="file://$PROJECT_DIR$/TP/multiple_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="834">
-          <caret line="420" column="62" selection-start-line="420" selection-start-column="62" selection-end-line="420" selection-end-column="62" />
+        <state relative-caret-position="1081">
+          <caret line="456" lean-forward="true" selection-start-line="456" selection-end-line="456" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
