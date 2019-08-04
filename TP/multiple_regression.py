@@ -332,11 +332,11 @@ def vv_ma3_rate_rate(df, start_date, term, nameposition):  # 거래량 3일간 �
         if (i + j + nameposition > 476490 - 3) or (i + j > 230 - 2):
             break
         if df.values[i + j + nameposition + 1][16] == None:
-            df.loc[i + j + nameposition, "vv_diff_rate_rate"] = 0
+            df.loc[i + j + nameposition, "vv_ma3_rate_rate"] = 0
         if float(df.values[i + j + nameposition + 1][18]) == float(0):
-            df.loc[i + j + nameposition, "vv_diff_rate_rate"] = 0
+            df.loc[i + j + nameposition, "vv_ma3_rate_rate"] = 0
         else:
-            df.loc[i + j + nameposition, "vv_diff_rate_rate"] = abs(df.values[i + j + nameposition][18] / df.values[i + j + nameposition + 1][18] - 1) * 100
+            df.loc[i + j + nameposition, "vv_ma3_rate_rate"] = abs(df.values[i + j + nameposition][18] / df.values[i + j + nameposition + 1][18] - 1) * 100
 
 
 if __name__ == "__main__":
